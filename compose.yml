@@ -10,19 +10,20 @@ services:
     # 通常コンテナを作り直すとデータ消えてしまうが、以下を設定することでコンテナを作り直してもそのデータを保持することができる
     volumes:
       - ./src/db/mysql_data:/var/lib/mysql
-    # passwordは必要ないっぽい
+    # 環境変数の設定
     environment:
       MYSQL_ROOT_PASSWORD: password
 
   # -- WEBサーバ --------------------------------------------
   web:
-    # dockerファイルで定義したrubyのビルド
+    # 同じディレクトリ配下のDockerfileを参照するといった意味合い
     build: .
     # railsのサーバーを起動するコマンドを実行
     # ポート番号：3000
     # バインドするIPアドレス：0.0.0.0 => バインドするIPアドレスをなんでも受け付ける
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
-    # 「./src」でソースの編集があった場合に「/app」と同期をとっておくことでローカルファイルを更新したらdockerのファイルも自動的に更新する
+    # 「./src」でソースの編集があった場合に「/app」と同期をとる
+    # ローカルファイルを更新したらdockerのファイルも自動的に更新する
     volumes:
       - ./src:/app
     # ポート指定
