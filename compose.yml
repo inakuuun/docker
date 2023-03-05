@@ -10,19 +10,20 @@ services:
     # 通常コンテナを作り直すとデータ消えてしまうが、以下を設定することでコンテナを作り直してもそのデータを保持することができる
     volumes:
       - ./src/db/mysql_data:/var/lib/mysql
-    # passwordは必要ないっぽい
+    # 環境変数の設定
     environment:
       MYSQL_ROOT_PASSWORD: password
 
   # -- WEBサーバ --------------------------------------------
   web:
-    # dockerファイルで定義したrubyのビルド
+    # 同じディレクトリ配下のDockerfileを参照するといった意味合い
     build: .
     # railsのサーバーを起動するコマンドを実行
     # ポート番号：3000
     # バインドするIPアドレス：0.0.0.0 => バインドするIPアドレスをなんでも受け付ける
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
-    # 「./src」でソースの編集があった場合に「/app」と同期をとっておくことでローカルファイルを更新したらdockerのファイルも自動的に更新する
+    # 「./src」でソースの編集があった場合に「/app」と同期をとる
+    # ローカルファイルを更新したらdockerのファイルも自動的に更新する
     volumes:
       - ./src:/app
     # ポート指定
@@ -31,36 +32,3 @@ services:
     # 通常rails側からmysqlに接続しようと思ったらmysqlの接続先IPアドレスを直接指定しないといけないが、composeだとdbのみで接続できる
     depends_on:
       - db
-
-# databaseのパスワードとlocalhostを設定する必要がある
-# database.ymlをvscodeで編集するために権限の設定が必要 => https://qiita.com/kazuhito_nakayama/items/3a49c9f3bd5c766d6134
-
-# アプリケーションのひな形をインストール
-# docker compose run web rails new . --force --database=mysql
-# --database=mysql：rails上でmysqlを使用することができるようにする => https://www.sejuku.net/blog/28403
-# ファイルを削除(全て削除してやり直したいとき) => https://benzenetarou.hatenablog.com/entry/sudo_rm
-
-# src直下にGemfileが生成され、Gemfileが新しくなったため、docker compose buildでイメージをビルドする
-# docker compose build
-
-# railsでデータベースを作成
-# docker compose run web rails db:create
-
-# サーバーを起動する
-# docker compose up
-# 「localhost:3000」でrubyの初期画面が表示される
-
-# 起動中のコンテナを表示
-# docker compose ps
-
-# コンテナを停止し、コンテナ、ネットワークボリュームイメージを削除する(DBのデータも消える) => https://www.ikkitang1211.site/entry/2021/03/09/084833#:~:text=%E3%80%8C%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%82%92%E5%81%9C%E6%AD%A2%E3%81%97%E3%80%81%20docker,%E3%81%AE%E6%8C%AF%E3%82%8B%E8%88%9E%E3%81%84%E3%81%AE%E3%82%88%E3%81%86%E3%81%A7%E3%81%99%E3%80%82
-# docker compose down
-
-# サーバーをデタッチドモードで起動(バックグラウンドで起動)
-# docker compose downを同じ画面で行うことができる
-# docker compose up -d
-
-# 起動中のコンテナにプロンプトモードで実行
-# コンテナ内でコマンドを実行したい時に利用する
-# docker compose exec web /bin/bash
-
