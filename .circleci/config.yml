@@ -19,7 +19,7 @@ jobs:
     steps:
       - checkout:
           # githubのリポジトリにチェックアウト
-          path: ./vendor/bundle
+          path: ~/docker
       # bundle installとかを実行してくれるコマンド
       - ruby/install-deps
 
@@ -46,7 +46,7 @@ jobs:
     # テストを実行するjobの設定
     steps:
       - checkout:
-          path: ./vendor/bundle
+          path: ~/docker
       - ruby/install-deps
       # データベースのセットアップが必要
       - run:

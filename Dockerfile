@@ -24,7 +24,8 @@ COPY ./src /app
 
 # ライブラリのインストール先を指定してruby関連の(Gemfile)を一括でインストールする
 RUN bundle config --local set path 'vendor/bundle' \
- && bundle install
+  && bundle config set --local deployment 'true' \
+  && bundle install
 
 # 作成したファイルをsrc直下にコピー
 COPY start.sh /start.sh
