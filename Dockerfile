@@ -23,7 +23,7 @@ WORKDIR /app
 COPY ./src /app
 
 # ライブラリのインストール先を指定してruby関連の(Gemfile)を一括でインストールする
-RUN bundle config --local set path 'vendor/bundle' \
+RUN bundle config --local set path './vendor/bundle' \
  && bundle install
 
 # 作成したファイルをsrc直下にコピー
