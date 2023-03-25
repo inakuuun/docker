@@ -1,6 +1,9 @@
 # ベースのイメージを指定
 FROM ruby:2.7
 
+# 環境変数を設定する定義
+ENV RAILS_ENV=production
+
 # javascript関連のライブラリをインストール
 # YarnリポジトリのGPGキーの追加とソースURLの追加
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \ 
@@ -22,3 +25,10 @@ COPY ./src /app
 # ライブラリのインストール先を指定してruby関連の(Gemfile)を一括でインストールする
 RUN bundle config --local set path 'vendor/bundle' \
  && bundle install
+
+# 作成したファイルをsrc直下にコピー
+COPY start.sh /start.sh
+# ファイルに実行権限を付与
+RUN chmod 744 /start.sh
+# start.shファイルを実行
+CMD ["sh", "/start.sh"]
