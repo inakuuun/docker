@@ -47,7 +47,7 @@ jobs:
     steps:
       - checkout:
           path: ~/docker
-      - ruby/install-deps
+      # - ruby/install-deps
       # データベースのセットアップが必要
       - run:
           name: Database setup
