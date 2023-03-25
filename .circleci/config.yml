@@ -12,7 +12,7 @@ jobs:
   build:
     docker:
       # ビルドを行うイメージの指定
-      - image: circleci/ruby:2.7
+      - image: circleci/ruby:2.7.7
     # githubのリポジトリ名配下のsrcを指定
     working_directory: ~/docker/src
     # stepsで実際に行うjobの中身を記載
@@ -26,7 +26,7 @@ jobs:
   # テスト
   test:
     docker:
-      - image: circleci/ruby:2.7
+      - image: circleci/ruby:2.7.7
       # CircleCIのmysqlのverが5.5だから(無料枠)
       - image: circleci/mysql:5.5
         # database.ymlで記載されている内容と一致させる
